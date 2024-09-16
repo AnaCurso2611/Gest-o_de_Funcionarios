@@ -1,0 +1,24 @@
+Este projeto está licenciado sob a Licença MIT.
+
+### `.gitignore`
+
+O arquivo `.gitignore` é usado para especificar quais arquivos ou diretórios devem ser ignorados pelo sistema de controle de versão Git. No caso de um projeto SQL, você pode querer ignorar arquivos de configuração específicos ou arquivos temporários.
+
+Aqui está um exemplo básico de `.gitignore`:
+
+```gitignore
+# Ignorar arquivos de banco de dados temporários
+*.sql
+
+# Ignorar arquivos de configuração específicos do editor
+*.swp
+*.swo
+*.DS_Store
+
+# Ignorar diretórios temporários
+tmp/
+temp/
+
+# Ignorar arquivos de backup
+*.bak
+*.backup
