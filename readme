@@ -1,0 +1,124 @@
+# Gestão de Funcionários
+
+Este projeto contém um banco de dados SQL para gerenciar informações de funcionários e departamentos. O banco de dados inclui tabelas para Departamentos, Funcionários e Salários, com exemplos de inserções e operações básicas de atualização e exclusão.
+
+## Estrutura do Banco de Dados
+
+O banco de dados `Gestão_de_funcionarios` possui as seguintes tabelas:
+
+- **Departamentos**
+  - `departamentoID` (INT, Primary Key, Auto Increment)
+  - `nome` (VARCHAR(50), Not Null)
+
+- **Funcionarios**
+  - `funcionarioID` (INT, Primary Key, Auto Increment)
+  - `nome` (VARCHAR(100), Not Null)
+  - `cargo` (VARCHAR(50), Not Null)
+  - `salario` (DECIMAL(10,2), Not Null)
+  - `departamentoID` (INT, Foreign Key referenciando `Departamentos(departamentoID)`)
+
+- **Salarios**
+  - `salarioID` (INT, Primary Key, Auto Increment)
+  - `dia_mes` (DATE, Not Null)
+  - `valor` (DECIMAL(10,2), Not Null)
+  - `funcionarioID` (INT, Foreign Key referenciando `Funcionarios(funcionarioID)`)
+
+## Operações SQL
+
+### Criação do Banco de Dados e Tabelas
+
+```sql
+CREATE DATABASE Gestão_de_funcionarios;
+USE Gestão_de_funcionarios;
+
+CREATE TABLE Departamentos (
+    departamentoID INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE Funcionarios (
+    funcionarioID INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(100) NOT NULL,
+    cargo VARCHAR(50) NOT NULL,
+    salario DECIMAL(10,2) NOT NULL,
+    departamentoID INT,
+    FOREIGN KEY (departamentoID) REFERENCES Departamentos(departamentoID)
+);
+
+CREATE TABLE Salarios (
+    salarioID INT PRIMARY KEY AUTO_INCREMENT,
+    dia_mes DATE NOT NULL,
+    valor DECIMAL(10,2) NOT NULL,
+    funcionarioID INT,
+    FOREIGN KEY (funcionarioID) REFERENCES Funcionarios(funcionarioID)
+);
+
+INSERT INTO Departamentos (departamentoID, nome) VALUES
+('1', 'gerencia'),
+('2', 'contabilidade'),
+('3', 'publicidade'),
+('4', 'empacotamento'),
+('5', 'supervisão');
+
+INSERT INTO Funcionarios (funcionarioID, nome, cargo, salario, departamentoID) VALUES
+('1221', 'Josivaldo', 'contador', '2000', '2'),
+('1222', 'Kamila', 'publicitaria', '2500', '3'),
+('1223', 'Osvaldo', 'gerente', '3500', '1'),
+('1224', 'Gabriel', 'empacotador', '1500', '4'),
+('1225', 'Andreia', 'supervisora', '2000', '5'),
+('1226', 'Monica', 'contadora', '2000', '2'),
+('1227', 'Jaqueline', 'gerente', '3500', '1'),
+('1228', 'Rafael', 'publicitario', '2500', '3'),
+('1229', 'Jeovani', 'empacotadora', '1500', '4'),
+('1230', 'Felipe', 'supervisor', '2000', '5');
+
+INSERT INTO Salarios (salarioID, dia_mes, valor, funcionarioID) VALUES
+('100', '2024-07-05', '2015', '1225'),
+('101', '2024-07-05', '1550', '1229'),
+('102', '2024-07-05', '3500', '1227'),
+('103', '2024-07-05', '2000', '1221'),
+('104', '2024-07-05', '1550', '1224'),
+('105', '2024-07-05', '2500', '1222'),
+('106', '2024-07-05', '2000', '1230'),
+('107', '2024-07-05', '2000', '1226'),
+('108', '2024-07-05', '3500', '1223'),
+('109', '2024-07-05', '2500', '1228');
+
+-- Consultar Funcionários e seus Departamentos
+SELECT 
+    f.nome AS funcionario,
+    f.salario AS salario,
+    f.cargo AS cargo,
+    d.nome AS departamento
+FROM
+    Funcionarios AS f
+JOIN 
+    Departamentos AS d
+ON 
+    f.departamentoID = d.departamentoID
+LIMIT 0, 1000;
+
+-- Atualizar Salário de um Funcionário
+UPDATE Funcionarios
+SET salario = 2200
+WHERE funcionarioID = 1225;
+
+-- Atualizar Nome de um Departamento
+UPDATE Departamentos
+SET nome = 'Marketing'
+WHERE departamentoID = 3;
+
+-- Excluir Salários de Funcionários do Departamento 2
+DELETE FROM Salarios
+WHERE funcionarioID IN (
+    SELECT funcionarioID FROM Funcionarios
+    WHERE departamentoID = 2
+);
+
+-- Excluir Funcionários do Departamento 2
+DELETE FROM Funcionarios
+WHERE departamentoID = 2;
+
+-- Excluir Departamento 2
+DELETE FROM Departamentos
+WHERE departamentoID = 2;
