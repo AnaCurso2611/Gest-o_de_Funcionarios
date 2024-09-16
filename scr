@@ -1,0 +1,89 @@
+create database Gestão_de_funcionarios;
+use Gestão_de_funcionarios;
+
+create table Departamentos(
+departamentoID int primary key auto_increment,
+nome varchar (50) not null
+);
+
+create table Funcionarios(
+funcionarioID int primary key auto_increment,
+nome varchar (100) not null,
+cargo varchar (50) not null,
+salario decimal (10,2) not null,
+departamentoID int,
+foreign key (departamentoID) references Departamentos(departamentoID)
+);
+
+create table Salarios(
+salarioID int primary key auto_increment,
+dia_mes date not null,
+valor decimal (10,2) not null,
+funcionarioID int,
+foreign key (funcionarioID) references Funcionarios(funcionarioID)
+);
+
+insert into Departamentos (departamentoID,nome) values
+('1','gerencia'),
+('2','contabilidade'),
+('3','publicidade'),
+('4','empacotamento'),
+('5','supervisão');
+
+insert into Funcionarios (funcionarioID,nome,cargo,salario,departamentoID) values
+('1221','Josivaldo','contador','2000','2'),
+('1222','Kamila','publicitaria','2500','3'),
+('1223','Osvaldo','gerente','3500','1'),
+('1224','Gabriel','empacotador','1500','4'),
+('1225','Andreia','supervisora','2000','5'),
+('1226','Monica','contadora','2000','2'),
+('1227','Jaqueline','gerente','3500','1'),
+('1228','Rafael','publicitario','2500','3'),
+('1229','Jeovani','empacotadora','1500','4'),
+('1230','Felipe','supervisor','2000','5');
+
+insert into Salarios (salarioID,dia_mes,valor,funcionarioID) values
+('100','2024-07-05','2015','1225'),
+('101','2024-07-05','1550','1229'),
+('102','2024-07-05','3500','1227'),
+('103','2024-07-05','2000','1221'),
+('104','2024-07-05','1550','1224'),
+('105','2024-07-05','2500','1222'),
+('106','2024-07-05','2000','1230'),
+('107','2024-07-05','2000','1226'),
+('108','2024-07-05','3500','1223'),
+('109','2024-07-05','2500','1228');
+
+select 
+    f.nome as funcionario,
+    f.salario as salario,
+    f.cargo as cargo,
+    d.nome as departamento
+from
+    Funcionarios as f
+join 
+    Departamentos as d
+on 
+    f.departamentoID = d.departamentoID
+limit 0, 1000;
+     
+update Funcionarios
+set salario = 2200
+where funcionarioID = 1225;
+
+update Departamentos
+set nome = 'Marketing'
+where departamentoID = 3;
+
+
+delete from Salarios
+where funcionarioID in (
+    select funcionarioID from Funcionarios
+    where departamentoID = 2
+);
+
+delete from Funcionarios
+where departamentoID = 2;
+
+delete from Departamentos
+where departamentoID = 2;
